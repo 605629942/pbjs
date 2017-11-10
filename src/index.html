@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>imOline ChatRoom</title>
+    <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
+    <!--
+    <link rel="stylesheet" href="css/main.css">
+    -->
+</head>
+
+<body>
+    <div class="pages">
+        <div class="chat page">
+            <div class="m-left">
+                <div class="sysInfoArea">
+                    <ul class="sysInfos"></ul>
+                </div>
+                <div class="chatArea">
+                    <ul class="messages"></ul>
+                </div>
+                <div class="inputArea">
+                   <input class="inputMessage" placeholder="在此输入..." />
+                    <input type="button" class="clearBtn" value="清屏"> 
+                    <input type="button" class="clearBtn link" value="连接人工客服"> 
+                </div>
+                <div class="content">内容</div>                
+            </div>
+            <div class="m-right">
+                <div class="userListArea">
+                    <!--
+                    <h3 class="numUsers">1</h3>
+                    -->
+                    <ul class="userLists"></ul>
+                </div>                
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script> -->
+    <!-- 引入本地jQuery库，以防CDN无法使用 -->
+    <script src="js/jquery.min.js"></script>
+    <!--<script src="js/bootstrap.min.js"></script>-->
+    <script src="js/socket.io.min.js"></script>
+    <!--
+    <script src="js/main.js"></script>
+    -->
+    <script src="js/long.min.js"></script>
+    <script src="js/bytebuffer.min.js"></script>
+    <script src="js/protobuf.min.js"></script>
+    <script>
+    $(function(){
+        var ProtoBuf = dcodeIO.ProtoBuf;
+        var builder = ProtoBuf.loadProtoFile("./demo.proto");
+        var peopleMessage = builder.build("peoplepackage.peopleMessage");
+        // var user = new peopleMessage();
+        // user.setName('aaa');
+        // user.setAge(13);
+        // var buf  = user.toArrayBuffer();
+        // console.log(buf.byteLength);
+        // //解析buf
+        // var data = peopleMessage.decode(buf);
+        // console.log(data);
+        // console.log(JSON.stringify(data).length);
+    
+        var socket = io('http://127.0.0.1:3000');
+        socket.on('new message',function(buffer){
+            console.log(buffer.byteLength);
+            var data = peopleMessage.decode(buffer);
+            console.log(data);
+            console.log(JSON.stringify(data).length);
+        });
+        
+    });
+    </script>
+</body>
+
+</html>
